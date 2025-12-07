@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaya Sussman Content Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --secondary: #059669;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .format-option {
+            position: relative;
+        }
+
+        .format-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .format-option label {
+            display: block;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .format-option input:checked + label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .format-option label:hover {
+            border-color: var(--primary-light);
+        }
+
+        .format-option .format-desc {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        button {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .output-area {
+            min-height: 300px;
+        }
+
+        #output {
+            font-family: 'Merriweather', Georgia, serif;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        #output:empty::before {
+            content: "Generated content will appear here...";
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .output-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .output-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+
+        .feedback-section {
+            margin-top: 30px;
+        }
+
+        .feedback-section .card {
+            border-left: 4px solid var(--warning);
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .rating-btn {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .rating-btn:hover {
+            border-color: var(--primary-light);
+        }
+
+        .rating-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .rating-btn .emoji {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .status-message.success {
+            display: block;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .voice-profile {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: none;
+        }
+
+        .voice-profile h3 {
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .voice-profile ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .voice-profile li {
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .voice-profile li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Shaya Sussman Content Generator</h1>
+        <p>AI-powered tool to generate content in your distinctive voice — blending Breslov wisdom with psychological insight</p>
+        <span class="badge">Preview Version - Your Feedback Welcome</span>
+    </header>
+
+    <div class="container">
+        <div class="main-grid">
+            <!-- Input Section -->
+            <div class="card">
+                <h2><span class="icon">&#9998;</span> Generate Content</h2>
+
+                <form id="generateForm">
+                    <div class="form-group">
+                        <label for="topic">Topic</label>
+                        <input type="text" id="topic" placeholder="e.g., Finding inner peace during difficult times" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Content Format</label>
+                        <div class="format-options">
+                            <div class="format-option">
+                                <input type="radio" name="format" id="article" value="article" checked>
+                                <label for="article">
+                                    <strong>Article</strong>
+                                    <div class="format-desc">800-1200 words</div>
+                                </label>
+                            </div>
+                            <div class="format-option">
+                                <input type="radio" name="format" id="social_media" value="social_media">
+                                <label for="social_media">
+                                    <strong>Social Media</strong>
+                                    <div class="format-desc">With hashtags</div>
+                                </label>
+                            </div>
+                            <div class="format-option">
+                                <input type="radio" name="format" id="class_outline" value="class_outline">
+                                <label for="class_outline">
+                                    <strong>Class Outline</strong>
+                                    <div class="format-desc">Nach Daily style</div>
+                                </label>
+                            </div>
+                            <div class="format-option">
+                                <input type="radio" name="format" id="short_reflection" value="short_reflection">
+                                <label for="short_reflection">
+                                    <strong>Reflection</strong>
+                                    <div class="format-desc">75-150 words</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="context">Additional Context (optional)</label>
+                        <textarea id="context" placeholder="e.g., For young professionals, beginner audience, etc."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="generateBtn">
+                        Generate Content
+                    </button>
+                </form>
+
+                <!-- Voice Profile Summary -->
+                <div class="card voice-profile" style="margin-top: 20px;">
+                    <h3>Voice Profile Highlights</h3>
+                    <ul>
+                        <li>Warm, encouraging, hopeful tone</li>
+                        <li>Rebbe Nachman & Breslov teachings</li>
+                        <li>Psychology + Torah wisdom blend</li>
+                        <li>Rhetorical questions for engagement</li>
+                        <li>Hebrew terms with context</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="card output-area">
+                <h2><span class="icon">&#128221;</span> Generated Content</h2>
+
+                <div id="loadingState" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Generating content in your voice...</p>
+                </div>
+
+                <div id="output"></div>
+
+                <div id="outputActions" class="output-actions hidden">
+                    <button class="btn-secondary" onclick="copyToClipboard()">
+                        Copy Text
+                    </button>
+                    <button class="btn-secondary" onclick="downloadContent()">
+                        Download
+                    </button>
+                    <button class="btn-primary" onclick="regenerate()">
+                        Regenerate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="card">
+                <h2><span class="icon">&#128172;</span> Your Feedback</h2>
+                <p style="color: var(--text-light); margin-bottom: 20px;">
+                    Help improve the tool by sharing your thoughts on the generated content.
+                </p>
+
+                <form id="feedbackForm">
+                    <div class="form-group">
+                        <label>How accurate is the voice/style?</label>
+                        <div class="rating-group" id="voiceRating">
+                            <button type="button" class="rating-btn" data-value="1">
+                                <span class="emoji">&#128533;</span>
+                                Not at all
+                            </button>
+                            <button type="button" class="rating-btn" data-value="2">
+                                <span class="emoji">&#128528;</span>
+                                Somewhat
+                            </button>
+                            <button type="button" class="rating-btn" data-value="3">
+                                <span class="emoji">&#128522;</span>
+                                Good
+                            </button>
+                            <button type="button" class="rating-btn" data-value="4">
+                                <span class="emoji">&#128525;</span>
+                                Very accurate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>How useful is this content?</label>
+                        <div class="rating-group" id="usefulRating">
+                            <button type="button" class="rating-btn" data-value="1">
+                                <span class="emoji">&#128078;</span>
+                                Not useful
+                            </button>
+                            <button type="button" class="rating-btn" data-value="2">
+                                <span class="emoji">&#128076;</span>
+                                Needs work
+                            </button>
+                            <button type="button" class="rating-btn" data-value="3">
+                                <span class="emoji">&#128077;</span>
+                                Useful
+                            </button>
+                            <button type="button" class="rating-btn" data-value="4">
+                                <span class="emoji">&#127775;</span>
+                                Ready to use
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackText">Specific feedback or suggestions</label>
+                        <textarea id="feedbackText" placeholder="What would make this better? Any phrases that don't sound like you? Missing elements?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackEmail">Your email (optional, for follow-up)</label>
+                        <input type="text" id="feedbackEmail" placeholder="email@example.com">
+                    </div>
+
+                    <button type="submit" class="btn-success">
+                        Submit Feedback
+                    </button>
+
+                    <div id="feedbackStatus" class="status-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            Built for Rabbi Shaya Sussman |
+            <a href="https://shaya-content-api.onrender.com/docs" target="_blank">API Documentation</a> |
+            <a href="https://github.com/Schulman-Coaching/shaya-sussman-content-generator" target="_blank">GitHub</a>
+        </p>
+    </footer>
+
+    <script>
+        const API_URL = 'https://shaya-content-api.onrender.com';
+        let lastGeneratedContent = '';
+        let lastTopic = '';
+        let lastFormat = '';
+
+        // Generate content
+        document.getElementById('generateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await generateContent();
+        });
+
+        async function generateContent() {
+            const topic = document.getElementById('topic').value;
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const context = document.getElementById('context').value;
+
+            lastTopic = topic;
+            lastFormat = format;
+
+            // Show loading state
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('outputActions').classList.add('hidden');
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('generateBtn').textContent = 'Generating...';
+
+            try {
+                const response = await fetch(`${API_URL}/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        topic,
+                        format,
+                        additional_context: context
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate content');
+                }
+
+                const data = await response.json();
+                lastGeneratedContent = data.content;
+
+                // Display content
+                document.getElementById('output').textContent = data.content;
+                document.getElementById('outputActions').classList.remove('hidden');
+
+            } catch (error) {
+                document.getElementById('output').innerHTML = `<span style="color: var(--error);">Error: ${error.message}. Please try again.</span>`;
+            } finally {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('generateBtn').disabled = false;
+                document.getElementById('generateBtn').textContent = 'Generate Content';
+            }
+        }
+
+        function regenerate() {
+            if (lastTopic) {
+                generateContent();
+            }
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(lastGeneratedContent).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            });
+        }
+
+        function downloadContent() {
+            const blob = new Blob([lastGeneratedContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `shaya-content-${lastFormat}-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Rating buttons
+        document.querySelectorAll('.rating-group').forEach(group => {
+            group.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    group.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
+        });
+
+        // Feedback form
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const voiceRating = document.querySelector('#voiceRating .rating-btn.selected')?.dataset.value || 0;
+            const usefulRating = document.querySelector('#usefulRating .rating-btn.selected')?.dataset.value || 0;
+            const feedbackText = document.getElementById('feedbackText').value;
+            const feedbackEmail = document.getElementById('feedbackEmail').value;
+
+            const feedback = {
+                timestamp: new Date().toISOString(),
+                topic: lastTopic,
+                format: lastFormat,
+                generatedContent: lastGeneratedContent.substring(0, 500) + '...',
+                voiceAccuracyRating: parseInt(voiceRating),
+                usefulnessRating: parseInt(usefulRating),
+                feedbackText,
+                email: feedbackEmail
+            };
+
+            // For now, log to console and show success
+            // In production, you'd send this to a backend endpoint
+            console.log('Feedback submitted:', feedback);
+
+            // Store in localStorage as backup
+            const existingFeedback = JSON.parse(localStorage.getItem('shayaFeedback') || '[]');
+            existingFeedback.push(feedback);
+            localStorage.setItem('shayaFeedback', JSON.stringify(existingFeedback));
+
+            // Show success message
+            const statusEl = document.getElementById('feedbackStatus');
+            statusEl.textContent = 'Thank you for your feedback! This helps improve the tool.';
+            statusEl.className = 'status-message success';
+
+            // Reset form
+            document.getElementById('feedbackForm').reset();
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusEl.className = 'status-message';
+            }, 5000);
+        });
+
+        // Check API health on load
+        fetch(`${API_URL}/health`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'healthy') {
+                    console.log('API connected successfully');
+                }
+            })
+            .catch(() => {
+                console.warn('API may be starting up...');
+            });
+    </script>
+</body>
+</html>
