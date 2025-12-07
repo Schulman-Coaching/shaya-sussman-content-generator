@@ -59,11 +59,35 @@ app = FastAPI(
 # CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure for production
+    allow_origins=[
+        "*",  # Allow all for development
+        "https://shaya-sussman-platform.manus.space",
+        "https://shayasussman.com",
+        "http://localhost:3000",
+        "http://localhost:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/", tags=["System"])
+async def root():
+    """Root endpoint with API information."""
+    return {
+        "name": "Shaya Sussman Content Generator API",
+        "version": "1.0.0",
+        "description": "AI-powered content generator in Rabbi Shaya Sussman's voice",
+        "docs": "/docs",
+        "endpoints": {
+            "generate": "POST /generate",
+            "formats": "GET /formats",
+            "voice_profile": "GET /voice-profile",
+            "system_prompt": "GET /system-prompt",
+            "health": "GET /health"
+        }
+    }
 
 
 # Request/Response Models
