@@ -7,9 +7,9 @@
 import React, { useState } from 'react';
 import { useShayaContent, ContentFormat } from './shaya-content-client';
 
-// Configuration - Update this URL after deploying to Vercel
-const API_URL = process.env.REACT_APP_SHAYA_API_URL || 'https://your-api.vercel.app';
-const API_KEY = process.env.REACT_APP_ANTHROPIC_API_KEY;
+// Configuration - Production API URL on Render
+const API_URL = process.env.REACT_APP_SHAYA_API_URL || 'https://shaya-content-api.onrender.com';
+// API key is configured server-side on Render, no need to pass from client
 
 interface ContentGeneratorProps {
   className?: string;

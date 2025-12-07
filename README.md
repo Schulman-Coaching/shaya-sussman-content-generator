@@ -45,17 +45,13 @@ python shaya_content_generator.py --show-voice-profile
 export ANTHROPIC_API_KEY="your-api-key-here"
 ```
 
-## REST API
+## Live API
 
-### Start the API Server
+The API is deployed and available at:
 
-```bash
-# Install API dependencies
-pip install fastapi uvicorn
+**Production URL**: `https://shaya-content-api.onrender.com`
 
-# Run the server
-uvicorn api:app --reload --port 8000
-```
+**Interactive Docs**: https://shaya-content-api.onrender.com/docs
 
 ### API Endpoints
 
@@ -71,41 +67,61 @@ uvicorn api:app --reload --port 8000
 ### Example API Request
 
 ```bash
-curl -X POST "http://localhost:8000/generate" \
+# Generate a short reflection
+curl -X POST "https://shaya-content-api.onrender.com/generate" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: your-anthropic-api-key" \
   -d '{
     "topic": "Finding hope during difficult times",
-    "format": "article",
-    "additional_context": "For young professionals"
+    "format": "short_reflection"
+  }'
+
+# Generate a social media post
+curl -X POST "https://shaya-content-api.onrender.com/generate" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "topic": "The power of gratitude",
+    "format": "social_media"
   }'
 ```
 
 ### JavaScript/React Integration
 
 ```javascript
-// From your React app
-const generateContent = async (topic, format = 'article') => {
-  const response = await fetch('https://your-api-url/generate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': process.env.ANTHROPIC_API_KEY,
-    },
-    body: JSON.stringify({
-      topic,
-      format,
-      additional_context: '',
-    }),
+// Using the provided client SDK
+import ShayaContentClient from './client/shaya-content-client';
+
+const client = new ShayaContentClient('https://shaya-content-api.onrender.com');
+
+// Generate content
+const article = await client.generateArticle('Finding inner peace');
+const socialPost = await client.generateSocialPost('Daily wisdom');
+const classOutline = await client.generateClassOutline('The power of Tehillim');
+const reflection = await client.generateReflection('Gratitude');
+```
+
+### React Hook Usage
+
+```javascript
+import { useShayaContent } from './client/shaya-content-client';
+
+function ContentGenerator() {
+  const { generate, isLoading, error, content } = useShayaContent({
+    baseUrl: 'https://shaya-content-api.onrender.com'
   });
 
-  const data = await response.json();
-  return data.content;
-};
+  const handleGenerate = async () => {
+    await generate('Finding hope', 'article');
+  };
 
-// Usage
-const article = await generateContent('Finding inner peace', 'article');
-const socialPost = await generateContent('Daily wisdom', 'social_media');
+  return (
+    <div>
+      <button onClick={handleGenerate} disabled={isLoading}>
+        {isLoading ? 'Generating...' : 'Generate'}
+      </button>
+      {content && <pre>{content}</pre>}
+    </div>
+  );
+}
 ```
 
 ## Docker Deployment
@@ -216,31 +232,31 @@ The generator captures Rabbi Shaya Sussman's distinctive voice:
 - Humanistic psychology (Rollo May, Irvin Yalom)
 - Brene Brown (vulnerability and imperfection)
 
-## Deployment Options
+## Deployment
 
-### 1. Vercel/Railway/Render
-Deploy the FastAPI app to any Python-compatible platform:
+### Current Production (Render)
+
+The API is currently deployed on Render at `https://shaya-content-api.onrender.com`
+
+To deploy your own instance:
+
+1. Fork this repository
+2. Create a new Web Service on [Render](https://render.com)
+3. Connect your GitHub repository
+4. Set environment variable: `ANTHROPIC_API_KEY`
+5. Render will auto-detect settings from `render.yaml`
+
+### Local Development
 
 ```bash
-# Procfile for Heroku/Render
-web: uvicorn api:app --host 0.0.0.0 --port $PORT
-```
+# Install dependencies
+pip install -r requirements.txt
 
-### 2. AWS Lambda
-Use Mangum for serverless deployment:
+# Set API key
+export ANTHROPIC_API_KEY="your-key"
 
-```python
-from mangum import Mangum
-from api import app
-
-handler = Mangum(app)
-```
-
-### 3. Google Cloud Run
-```bash
-gcloud run deploy shaya-content-api \
-  --source . \
-  --set-env-vars ANTHROPIC_API_KEY=your-key
+# Run the server
+uvicorn api:app --reload --port 8000
 ```
 
 ## Integration with Shaya Sussman Platforms
